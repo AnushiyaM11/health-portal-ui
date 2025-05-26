@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_URL = 'http://127.0.0.1:5000/api/auth/login'; // Adjust if deployed
+const API_URL = 'https://v1-27300684315.europe-west1.run.app/api/auth/login'; // Adjust if deployed
 
 export const login = async (email, password) => {
   try {
