@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useRef } from 'react';
 import html2pdf from "html2pdf.js";
+import { AppBar, Toolbar, Avatar, Tooltip } from "@mui/material";
 import {
     Paper,
     Box,
@@ -20,7 +21,6 @@ import FormatListNumberedIcon from '@mui/icons-material/FormatListNumbered';
 import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
 import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
 import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
-import FormatClearIcon from '@mui/icons-material/FormatClear';
 import { Underline } from '@tiptap/extension-underline';
 import { TextAlign } from '@tiptap/extension-text-align'
 import { EditorContent } from '@tiptap/react';
@@ -28,8 +28,9 @@ import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { useSnackbar } from 'notistack';
 import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
+import { jwtDecode } from "jwt-decode";
 
-const MAX_CHAR = 500;
+const MAX_CHAR = 5000;
 
 const MediaForm = ({ editor, clearContent }) => {
     const [errors, setErrors] = useState({});
@@ -42,6 +43,7 @@ const MediaForm = ({ editor, clearContent }) => {
         ],
         content: '',
     });
+
 
     const consultEditor = useEditor({
         extensions: [StarterKit,
@@ -73,6 +75,7 @@ const MediaForm = ({ editor, clearContent }) => {
         patientContact: ''
     };
 
+
     const printableRef = useRef();
     const { enqueueSnackbar } = useSnackbar();
 
@@ -92,6 +95,21 @@ const MediaForm = ({ editor, clearContent }) => {
             });
         }
     };
+    const getEmailFromToken = () => {
+        const token = localStorage.getItem("token");
+        if (!token) return null;
+
+        try {
+            const decoded = jwtDecode(token);
+            return decoded.sub || null;
+        } catch (error) {
+            console.error("Invalid token", error);
+            return null;
+        }
+    };
+
+    const username = getEmailFromToken()
+
     const validate = () => {
         const newErrors = {};
         const phoneRegex = /^[0-9]{10,15}$/;
@@ -247,7 +265,21 @@ const MediaForm = ({ editor, clearContent }) => {
             });
     };
     return (
+
         <div>
+            <AppBar position="static" color="primary" elevation={2}>
+                <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+                    <Typography variant="h6">My App</Typography>
+
+                    <Box display="flex" alignItems="center">
+                        <Tooltip title={getEmailFromToken() || "User"} arrow>
+                            <Avatar sx={{ bgcolor: "#1976d2", cursor: "pointer" }}>
+                                {username ? username.charAt(0).toUpperCase() : "U"}
+                            </Avatar>
+                        </Tooltip>
+                    </Box>
+                </Toolbar>
+            </AppBar>
             <Paper
                 elevation={0}
                 sx={{
@@ -468,7 +500,7 @@ const MediaForm = ({ editor, clearContent }) => {
                         </IconButton>
                         <IconButton
                             color={consultEditor?.isActive('italic') ? 'primary' : 'default'}
-                            onClick={() => consultEditor.chain().focus().toggleItalic().run()}> 
+                            onClick={() => consultEditor.chain().focus().toggleItalic().run()}>
                             <FormatItalicIcon />
                         </IconButton>
                         <IconButton
@@ -558,16 +590,16 @@ const MediaForm = ({ editor, clearContent }) => {
                         }}
                     >
                         <Box
-                          sx={{
-                            display: 'flex',
-                            flexDirection: 'column', // stack children vertically
-                            alignItems: 'center', // center horizontally
-                            justifyContent: 'center',
-                            marginBottom: '15px',
-                            borderBottom: '2px solid #1976d2',
-                            paddingBottom: '10px',
-                            textAlign: 'center',
-                          }}
+                            sx={{
+                                display: 'flex',
+                                flexDirection: 'column', // stack children vertically
+                                alignItems: 'center', // center horizontally
+                                justifyContent: 'center',
+                                marginBottom: '15px',
+                                borderBottom: '2px solid #1976d2',
+                                paddingBottom: '10px',
+                                textAlign: 'center',
+                            }}
                         >
                             <Typography
                                 variant="h5"
