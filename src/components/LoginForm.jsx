@@ -36,6 +36,10 @@ const LoginForm = () => {
             setError("Please enter a valid email address.");
             return;
         }
+        if (password.length < 6) {
+            setError("Password must be at least 6 characters.");
+            return;
+        }
         try {
             const data = await login(email, password);
             localStorage.setItem('token', data.access_token);
