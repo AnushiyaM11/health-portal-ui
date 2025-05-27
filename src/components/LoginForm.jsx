@@ -7,12 +7,20 @@ import {
     Typography,
     Paper,
     Avatar,
+    InputAdornment,
+    IconButton,
+    Link
 } from '@mui/material';
 import { useNavigate } from "react-router-dom";
-import LocalHospitalIcon from '@mui/icons-material/LocalHospital';
+import {
+    LocalHospital as LocalHospitalIcon,
+    Visibility as VisibilityIcon,
+    VisibilityOff as VisibilityOffIcon,
+    Lock as LockIcon,
+    Email as EmailIcon
+} from '@mui/icons-material';
 import { login } from '../services/authService';
 import { useSnackbar } from 'notistack';
-
 
 const LoginForm = () => {
     const navigate = useNavigate();
@@ -20,15 +28,13 @@ const LoginForm = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const [showPassword, setShowPassword] = useState(false);
 
-
-    // validating email 
     const validateEmail = (email) => {
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
         return emailRegex.test(email);
     };
 
-    // Submit the email & pass
     const handleSubmit = async (e) => {
         e.preventDefault();
         setError('');
@@ -36,16 +42,12 @@ const LoginForm = () => {
             setError("Please enter a valid email address.");
             return;
         }
-        if (password.length < 6) {
-            setError("Password must be at least 6 characters.");
-            return;
-        }
         try {
             const data = await login(email, password);
             localStorage.setItem('token', data.access_token);
-            enqueueSnackbar("Form data added successfully!", {
+            enqueueSnackbar("Logged in successfully!", {
                 variant: "success",
-                autoHideDuration: 1000, // 1 second 
+                autoHideDuration: 1000,
             });
             navigate("/medical-report");
         } catch (err) {
@@ -54,56 +56,142 @@ const LoginForm = () => {
     };
 
     return (
-        <Container maxWidth="xs"
-            sx={{
-                height: '100vh',
-                display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                bgcolor: '#f5f9fc',
-                p: 2,
-            }}
-        >
-            <Paper elevation={6} sx={{ p: 4, mt: 8, borderRadius: 3 }}>
+        <Container maxWidth="xs" disableGutters sx={{
+            minHeight: '100vh',
+            display: 'flex',
+            justifyContent: 'center',
+            backgroundColor:'rgba(255, 255, 255, 0.9)',
+            alignItems: 'center',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            position: 'relative',
+            '&::before': {
+                content: '""',
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                bottom: 0,
+                backgroundColor: 'rgba(255, 255, 255, 0.9)',
+                backdropFilter: 'blur(2px)',
+            }
+        }}>
+            <Paper elevation={10} sx={{ 
+                p: 4, 
+                borderRadius: 4,
+                width: '90%',
+                maxWidth: 450,
+                position: 'relative',
+                zIndex: 1,
+                boxShadow: '0 8px 32px rgba(0, 0, 0, 0.1)',
+                border: '1px solid rgba(255, 255, 255, 0.3)',
+                backdropFilter: 'blur(8px)',
+                backgroundColor: 'rgba(255, 255, 255, 0.85)'
+            }}>
                 <Box display="flex" flexDirection="column" alignItems="center" gap={2}>
-                    <Avatar sx={{ bgcolor: '#1976d2', width: 56, height: 56 }}>
+                    <Avatar sx={{ 
+                        bgcolor: 'primary.main', 
+                        width: 64, 
+                        height: 64,
+                        mb: 2,
+                        boxShadow: 3
+                    }}>
                         <LocalHospitalIcon fontSize="large" />
                     </Avatar>
-                    <Typography variant="h5" fontWeight="bold">
-                        Health Portal Login
+                    
+                    <Typography variant="h4" fontWeight="600" color="primary">
+                        Health Portal
                     </Typography>
+                    
+                    <Typography variant="body1" color="text.secondary" textAlign="center">
+                        Secure Access to Medical Services
+                    </Typography>
+                    
                     {error && (
-                        <Typography variant="body2" color="error" textAlign="center">
+                        <Typography 
+                            variant="body2" 
+                            color="error" 
+                            textAlign="center"
+                            sx={{
+                                bgcolor: '#ffffff', 
+                                color: 'error.main',
+                                p: 1,
+                                borderRadius: 1,
+                                width: '100%'
+                            }}
+                        >
                             {error}
                         </Typography>
                     )}
-                    <form style={{ width: '100%' }} onSubmit={handleSubmit}>
+                    
+                    <form style={{ width: '100%', marginTop: 16 }} onSubmit={handleSubmit}>
                         <TextField
                             fullWidth
-                            label="Email"
+                            label="Email Address"
                             variant="outlined"
                             margin="normal"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             required
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <EmailIcon color="action" />
+                                    </InputAdornment>
+                                ),
+                            }}
+                            sx={{ mb: 2 }}
+                            placeholder="Test@gmail.com"
                         />
+                        
                         <TextField
                             fullWidth
                             label="Password"
-                            type="password"
+                            type={showPassword ? 'text' : 'password'}
                             variant="outlined"
                             margin="normal"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             required
+                            InputProps={{
+                                startAdornment: (
+                                    <InputAdornment position="start">
+                                        <LockIcon color="action" />
+                                    </InputAdornment>
+                                ),
+                                endAdornment: (
+                                    <InputAdornment position="end">
+                                        <IconButton
+                                            aria-label="toggle password visibility"
+                                            onClick={() => setShowPassword(!showPassword)}
+                                            edge="end"
+                                        >
+                                            {showPassword ? <VisibilityOffIcon /> : <VisibilityIcon />}
+                                        </IconButton>
+                                    </InputAdornment>
+                                ),
+                            }}
+                            placeholder="••••••••"
                         />
+                        
                         <Button
                             fullWidth
                             type="submit"
                             variant="contained"
-                            sx={{ mt: 2, backgroundColor: '#1976d2' }}
+                            size="large"
+                            sx={{ 
+                                mt: 3, 
+                                mb: 2,
+                                height: 48,
+                                borderRadius: 2,
+                                textTransform: 'none',
+                                fontSize: 16,
+                                '&:hover': {
+                                    backgroundColor: 'primary.dark'
+                                }
+                            }}
                         >
-                            Login
+                            Sign In
                         </Button>
                     </form>
                 </Box>
