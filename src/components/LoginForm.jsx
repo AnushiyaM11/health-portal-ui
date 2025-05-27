@@ -8,8 +8,7 @@ import {
     Paper,
     Avatar,
     InputAdornment,
-    IconButton,
-    Link
+    IconButton
 } from '@mui/material';
 import { useNavigate } from "react-router-dom";
 import {

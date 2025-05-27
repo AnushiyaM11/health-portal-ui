@@ -614,45 +614,23 @@ const MediaForm = ({ editor, clearContent }) => {
                         </Box>
 
                         {/* Chief Complaint */}
-                        <Box sx={{
-                            marginBottom: '30px',
-                            pageBreakInside: 'avoid',
-                            breakInside: 'avoid',
-                        }}>
+                        <Box className="pdf-section">
                             <Typography variant="h6" sx={{ marginBottom: '15px', fontWeight: '600', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>
                                 Chief Complaint
                             </Typography>
                             <div
-                                style={{
-                                    padding: '15px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    backgroundColor: '#f9f9f9',
-                                    minHeight: '100px',
-                                    whiteSpace: 'pre-wrap',
-                                }}
+                                className="pdf-content-box"
                                 dangerouslySetInnerHTML={{ __html: chiefEditor?.getHTML() || '' }}
                             />
                         </Box>
 
                         {/* Consultation Note */}
-                        <Box sx={{
-                            marginBottom: '30px',
-                            pageBreakInside: 'avoid',
-                            breakInside: 'avoid',
-                        }}>
+                        <Box className="pdf-section">
                             <Typography variant="h6" sx={{ marginBottom: '15px', fontWeight: '600', borderBottom: '1px solid #ddd', paddingBottom: '5px' }}>
                                 Consultation Note
                             </Typography>
                             <div
-                                style={{
-                                    padding: '15px',
-                                    border: '1px solid #ccc',
-                                    borderRadius: '4px',
-                                    backgroundColor: '#f9f9f9',
-                                    minHeight: '100px',
-                                    whiteSpace: 'pre-wrap',
-                                }}
+                                className="pdf-content-box"
                                 dangerouslySetInnerHTML={{ __html: consultEditor?.getHTML() || '' }}
                             />
                         </Box>
