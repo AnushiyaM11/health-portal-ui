@@ -283,12 +283,9 @@ const MediaForm = ({ editor, clearContent }) => {
             <Paper
                 elevation={0}
                 sx={{
-                    width: '100%',
-                    maxWidth: '800px',
                     margin: '0 auto',
                     border: '.5px solid #e0e0e0',
                     padding: '55px',
-                    marginTop: '29px',
                 }}
             >
                 <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '40px', mb: 3 }}>

@@ -55,7 +55,7 @@ const LoginForm = () => {
     };
 
     return (
-        <Container maxWidth="xs" disableGutters sx={{
+        <Container maxWidth={false} disableGutters sx={{
             minHeight: '100vh',
             display: 'flex',
             justifyContent: 'center',
@@ -63,6 +63,7 @@ const LoginForm = () => {
             alignItems: 'center',
             backgroundSize: 'cover',
             backgroundPosition: 'center',
+            width: '100%',
             position: 'relative',
             '&::before': {
                 content: '""',
@@ -140,7 +141,7 @@ const LoginForm = () => {
                                 ),
                             }}
                             sx={{ mb: 2 }}
-                            placeholder="Test@gmail.com"
+                            placeholder="Email"
                         />
                         
                         <TextField
@@ -170,7 +171,7 @@ const LoginForm = () => {
                                     </InputAdornment>
                                 ),
                             }}
-                            placeholder="••••••••"
+                            placeholder="Password"
                         />
                         
                         <Button
